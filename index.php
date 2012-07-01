@@ -1,23 +1,28 @@
 <?php
-session_start();
 require_once("db.php");
-
-$data['ip'] = $_SERVER['REMOTE_ADDR'];
+require_once("myclass.php");
+$db = new DB;
+$m = new mada;
+$browser = $m->get_browser();
 
 $data['nama_komputer'] = gethostname();
-// kalo uotput ga sesuai harapan gunakan yang di bawah
+// kalo output ga sesuai harapan gunakan yang di bawah
 //$data['nama_komputer'] = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
-$data['browser'] = $_SERVER['HTTP_USER_AGENT'];
+$data['browser'] = $browser['name'];
 $data['url_server'] = $_SERVER['SERVER_NAME'];
-//$data['waktu'] = $_SESSION['waktu'];
+$data['ip'] = $_SERVER['REMOTE_ADDR'];
 
-$db = new DB;
+$cek = $db->datalog($data);
+$url = base64_encode($data['url_server']);
 
-$db->datalog($data);
+if($cek == 'iklan') //jika kategori url yang di panggil, arahkan ke blank page
+	{
+		header("location:blank.php");
+	}
+	else
+	{
+		header("location:response.php?url=$url");
+	}
 
-$url = $data['url_server'];
-
-header("location:response.php?url=$url");
 ?>
-

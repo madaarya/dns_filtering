@@ -1,5 +1,5 @@
 <?php
-$url = $_REQUEST['url'];
+$url = base64_decode($_REQUEST['url']);
 ?>
 
 <html>
@@ -15,6 +15,8 @@ $url = $_REQUEST['url'];
 			});
 	});
 	</script>
+	
+	
     </head>
     <body>
         <div id="contact">

@@ -33,16 +33,34 @@ header("location:adminlogin.php");
 		$("#url").click(function(){
 			$(".content").load("manage_url.php");
 		});
+		
+		$("#message").click(function(){
+			$(".content").load("manage_message.php");
+		});
 	});
 	</script>
+	
+	<style>
+	#pager
+	{
+	margin-left:20px; 
+	margin-right:20px;
+	
+	}
+	
+	</style>
+	
     </head>
     <body>
     <div id="contact">
 <h1>Hai <?php echo $_SESSION['nama']; ?></h1>
 <br />
 <span style="float:left">
-<a href="#" id="list_history">History blocked</a><span style="margin-left:20px; margin-right:20px">|</span> <a href="#" id="url">Manage url</a><span style="margin-left:20px; margin-right:20px">|</span><a href="#" id="category">Manage category</a>
-<span style="margin-left:20px; margin-right:20px">|</span><a href="admin.php?act=logout" id="category">Logout</a>
+<a href="#" id="list_history">History blocked</a><span id="pager">|</span> 
+<a href="#" id="url">Manage url</a><span id="pager">|</span>
+<a href="#" id="category">Manage category</a><span id="pager">|</span>
+<a href="#" id="message">Message from user</a><span id="pager">|</span>
+<a href="admin.php?act=logout" id="category">Logout</a>
 </span>
 
 <br />

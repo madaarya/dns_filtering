@@ -42,7 +42,7 @@ $(document).ready(function() {
 	$(".hapus").click(function(){
 		 var element = $(this);
 		 var del_id = element.attr("id");
-		 var info = 'id=' + del_id;
+		 var info = 'id_category=' + del_id;
 		 if(confirm("Anda yakin akan menghapus?"))
 		 {
 			 $.ajax({
@@ -50,9 +50,9 @@ $(document).ready(function() {
 			 url : "cud.php",
 			 data: info,
 			 success: function(){
+			 	$(".isi").load("manage_category.php");
 			 }
-			 });	
-		 $(this).parents(".content").animate({ opacity: "hide" }, "slow");
+			 });
  			}
 		 return false;
 		 });
@@ -75,7 +75,7 @@ $(document).ready(function() {
 <tr>
 	<th>No</th>
 	<th>Description</th>
-	<!--<th>Action</th>-->
+	<th>Action</th>
 </tr>	
 <?php
 require_once("db.php");
@@ -93,10 +93,10 @@ while ($d = mysqli_fetch_array($data)){
 				}
 	
 	 ?>
-<tr bgcolor="<?php echo $bgcolor; ?>">
+<tr bgcolor="<?php echo $bgcolor; ?>" class="content">
 <td align="center"><?php echo $no; ?></td>
 <td align="center"><?php echo $d['description']; ?></td>
-<!--<td align="center"><a href="#" class="hapus" id="<?php echo $d['pk_reasons']; ?>" >Hapus</a></td>-->	 
+<td align="center"><a href="#" class="hapus" id="<?php echo $d['pk_reasons']; ?>" >Hapus</a></td>
 </tr>
 <?php $no++; } ?>
 </table>

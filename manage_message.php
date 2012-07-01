@@ -1,4 +1,6 @@
-<div class="isi">
+<?php
+require_once("db.php");
+?>
 
 <style>
 li
@@ -18,16 +20,15 @@ cursor: pointer;
 }
 
 </style>
-
+<div class="isi">
 <?php
-require_once("db.php");
-$per_page = 5; 
+$per_page = 2; 
 $db = new DB;
 
-$kat = $_POST['kategori'];
+//$kat = $_POST['kategori'];
 
 //Calculating no of pages
-$sql = $db->display_url_all();
+$sql = $db->display_message_all();
 $count = mysqli_num_rows($sql);
 $pages = ceil($count/$per_page);
 ?>
@@ -40,8 +41,7 @@ $(document).ready(function() {
 	Display_Load();
 	
 	
-	
-	$("#content").load("data_url.php?page=1", Hide_Load());
+	$("#content").load("data_message.php?page=1", Hide_Load());
 
 	function Display_Load()
 	{
@@ -66,7 +66,7 @@ $(document).ready(function() {
 	//Loading Data
 	var pageNum = this.id;
 	
-	$("#content").load("data_url.php?page=" + pageNum, Hide_Load());
+	$("#content").load("data_message.php?page=" + pageNum, Hide_Load());
 	});
 
 
@@ -86,5 +86,6 @@ echo '<li id="'.$i.'">'.$i.'</li>';
 }
 ?>
 </ul>
+
 
 </div>

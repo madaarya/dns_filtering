@@ -30,6 +30,13 @@ class DB{
 		mysqli_query($this->link,$query);
 	}
 	
+	public function hapus_category($id_category)
+	{
+		$query = "DELETE FROM REASONS_BLOCKED WHERE pk_reasons='$id_category'";
+		mysqli_query($this->link,$query);
+	}
+	
+	
 	public function tambah_url($kategori,$url)
 	{
 		$query = "INSERT INTO URL_BLOKED(pk_url,url_name,fk_reasons) 
@@ -37,9 +44,15 @@ class DB{
 		mysqli_query($this->link,$query);
 	}
 	
+	public function hapus_url($id_url)
+	{
+		$query = "DELETE FROM URL_BLOKED WHERE pk_url='$id_url'";
+		mysqli_query($this->link,$query);
+	}
 	
 	
-	public function display_datalog($kategori=NULL)
+	
+	public function display_datalog($per_page,$start,$kategori=NULL)
 	{
 		if(!empty($kategori))
 		{
@@ -49,7 +62,8 @@ class DB{
 					LEFT JOIN REASONS_BLOCKED r ON r.pk_reasons = u.fk_reasons
 					WHERE u.fk_reasons = '$kategori'
 					GROUP BY d.url_server
-					ORDER BY total_point DESC";
+					ORDER BY total_point DESC
+					LIMIT $start,$per_page";
 		}
 		else
 		{
@@ -58,29 +72,97 @@ class DB{
 					LEFT JOIN URL_BLOKED u ON u.url_name = d.url_server
 					LEFT JOIN REASONS_BLOCKED r ON r.pk_reasons = u.fk_reasons
 					GROUP BY d.url_server
-					ORDER BY total_point DESC";
+					ORDER BY total_point DESC
+					LIMIT $start,$per_page";
 		}
 					
 		$t = mysqli_query($this->link,$query);
 		return $t;
 	}
 	
-	public function display_url($kategori=NULL)
+	public function display_datalog_all()
 	{
-		if(!empty($kategori))
-		{
-		$query = "SELECT u.url_name, r.description
-					FROM `URL_BLOKED` u
+		$query = "SELECT COUNT( * ) AS total_point, d.url_server, r.description
+					FROM `DATALOG` d
+					LEFT JOIN URL_BLOKED u ON u.url_name = d.url_server
 					LEFT JOIN REASONS_BLOCKED r ON r.pk_reasons = u.fk_reasons
-					WHERE u.fk_reasons = '$kategori'
-					ORDER BY u.url_name DESC";
+					GROUP BY d.url_server
+					ORDER BY total_point DESC";
+		$t = mysqli_query($this->link,$query);
+		return $t;
+	}
+	
+	public function display_message($per_page,$start)
+	{
+		$query = "SELECT pk_contact,name,email, LEFT(message,10) as pesan, added_date,status FROM CONTACT ORDER BY status DESC 
+		LIMIT $start,$per_page";
+		$t = mysqli_query($this->link,$query);
+		return $t;
+	}
+	
+	public function display_message_all()
+	{
+		$query = "SELECT * FROM CONTACT ORDER BY status DESC";
+		$t = mysqli_query($this->link,$query);
+		return $t;
+	}
+	
+	public function display_detail_message($id_message)
+	{
+		$query_one = "UPDATE CONTACT set STATUS='0' where pk_contact='$id_message'";
+		mysqli_query($this->link,$query_one);
+		
+		$query = "SELECT * FROM CONTACT WHERE pk_contact = '$id_message'";
+		$t = mysqli_query($this->link,$query);
+		return $t;
+	}
+	
+	public function hapus_message($id_message)
+	{
+		$query = "DELETE FROM CONTACT WHERE pk_contact='$id_message'";
+		mysqli_query($this->link,$query);
+	}
+	
+	public function display_detail_datalog($name)
+	{
+		$query = "SELECT * FROM DATALOG WHERE url_server = '$name'";
+		$t = mysqli_query($this->link,$query);
+		return $t;
+	}
+	
+	public function display_url_all($kat=NULL)
+	{
+		if(empty($kat))
+		{
+			$query = "SELECT * FROM URL_BLOKED";
 		}
 		else
 		{
-		$query = "SELECT u.url_name, r.description
+			$query = "SELECT * FROM URL_BLOKED WHERE fk_reasons = '$kat'";
+		}
+		
+		$r = mysqli_query($this->link,$query);
+		return $r;
+	}
+	
+	public function display_url($per_page,$start,$kat=NULL)
+	{
+		if(!empty($kat))
+		{
+		$query = "SELECT u.url_name, r.description, u.pk_url
 					FROM `URL_BLOKED` u
 					LEFT JOIN REASONS_BLOCKED r ON r.pk_reasons = u.fk_reasons
-					ORDER BY u.url_name DESC";
+					WHERE u.fk_reasons = '$kat'
+					ORDER BY u.url_name DESC
+					LIMIT $start,$per_page ";
+		}
+		else
+		{
+		$query = "SELECT u.url_name, r.description, u.pk_url
+					FROM `URL_BLOKED` u
+					LEFT JOIN REASONS_BLOCKED r ON r.pk_reasons = u.fk_reasons
+					ORDER BY u.url_name DESC
+					LIMIT $start,$per_page ";
 		}
 					
 		$t = mysqli_query($this->link,$query);
@@ -96,24 +178,6 @@ class DB{
 	
 	}
 	
-	public function dbNewMessage($email,$name,$message,$url){
-		$email 	 	= mysqli_real_escape_string($this->link,$email);
-		$name 		= mysqli_real_escape_string($this->link,$name);
-		$message 	= mysqli_real_escape_string($this->link,$message);
-		
-		mysqli_autocommit($this->link,FALSE);
-		
-		$query = "INSERT INTO CONTACT(pk_contact,name,email,message,url_server) 
-				  VALUES('NULL','$name','$email','$message','$url')";
-		mysqli_query($this->link,$query);
-		
-		if(mysqli_errno($this->link))
-			return -1;
-		else{
-			mysqli_commit($this->link);
-			return 1;
-		}
-	}
 	
 	public function datalog($data){
 		$ip 	 	= mysqli_real_escape_string($this->link,$data['ip']);
@@ -121,19 +185,22 @@ class DB{
 		$browser 	= mysqli_real_escape_string($this->link,$data['browser']);
 		$url_server 	= mysqli_real_escape_string($this->link,$data['url_server']);
 		$waktu 		= date("Y-m-d H:i:s");
+		$status		= 0; //berarti belum di baca
 		
-		mysqli_autocommit($this->link,FALSE);
-		
-		$query = "INSERT INTO DATALOG(pk_datalog,ip,nama_komputer,browser,url_server,waktu) 
-				  VALUES('NULL','$ip','$nama_komputer','$browser','$url_server','$waktu')";
+		$query = "INSERT INTO DATALOG(pk_datalog,ip,nama_komputer,browser,url_server,waktu,status) 
+				VALUES('NULL','$ip','$nama_komputer','$browser','$url_server','$waktu','$status')";
 		mysqli_query($this->link,$query);
 		
-		if(mysqli_errno($this->link))
-			return -1;
-		else{
-			mysqli_commit($this->link);
-			return 1;
-		}
-	}      
+		$query = "SELECT r.description
+				FROM `URL_BLOKED` u
+				LEFT JOIN REASONS_BLOCKED r ON r.pk_reasons = u.fk_reasons
+		 WHERE u.url_name = '$url_server'";
+		$m = mysqli_query($this->link,$query);
+		
+		$r = $m->fetch_array();
+		$tipe =  $r['description'];
+		return $tipe;
+	}
+     
 };
 ?>
