@@ -60,6 +60,26 @@ $(document).ready(function() {
 });
 </script>
 
+<style>
+
+table
+{
+width:80%; border:1px solid #ffcccc; margin-bottom:20px;
+}
+
+table th
+{
+background:#E6E6E6; padding:5px 15px 5px 15px; color:#573c1e; font-weight:bold; text-align:center; border-bottom:1px solid #ffcccc; font-size: 16px;
+}
+
+table td
+{
+border-bottom:1px solid #ffcccc; padding:5px 15px 5px 15px; border-right:1px solid #ffcccc;
+}
+
+</style>
+
+
 <a href="#" id="tambah">Tambah data</a>
 
 <div id="form_tambah" style="display:none">

@@ -71,6 +71,26 @@ $(".hapus").click(function(){
 });
 </script>
 
+<style>
+
+table
+{
+width:80%; border:1px solid #ffcccc; margin-bottom:20px;
+}
+
+table th
+{
+background:#E6E6E6; padding:5px 15px 5px 15px; color:#573c1e; font-weight:bold; text-align:center; border-bottom:1px solid #ffcccc; font-size: 16px;
+}
+
+table td
+{
+border-bottom:1px solid #ffcccc; padding:5px 15px 5px 15px; border-right:1px solid #ffcccc;
+}
+
+</style>
+
+
 <p>Menu manage Url blocked</p>
 
 Select Category : <select name="kategori" id="kategori">
@@ -93,10 +113,10 @@ while($s = mysqli_fetch_array($kategori))
 <br /><br />
 
 <a href="#" id="tambah">Tambah data</a>
-
+<br />
 <div id="form_tambah" style="display:none">
 	<form name="category" id="ContactForm">
-		<p>Url name :<input type="input" name="url" id="desc" /></p>
+		<p>Url name <span style="padding-left:55px">:<input type="input" name="url" id="desc" /></span></p>
 		<p>Select Category : <select name="category" id="kategori">
 <option value="">select category</option>
 <?php
@@ -117,12 +137,13 @@ while($s = mysqli_fetch_array($kategori))
 	<div id="loading-box" style="display:none;">Loading...</div>
 </div>
 
-
+<br />
 <table>
 <tr>
 	<th>No</th>
 	<th>Url Name</th>
 	<th>Reason</th>
+	<th>Action</th>
 </tr>	
 <?php
 

@@ -1,0 +1,32 @@
+*{
+    margin:0;
+    padding:0;
+}
+body{
+    background-color:#fff;
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: normal;
+    letter-spacing: normal;
+    line-height: 1.4em;
+    
+}
+
+#core
+{
+    width:960px;
+    min-height : 600px;
+    border:5px solid #ffcccc;
+    margin:20px auto 0px auto;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+}
+
+.core-content
+{
+padding-top : 20px;
+padding-left : 20px;
+
+}

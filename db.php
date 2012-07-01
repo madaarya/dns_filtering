@@ -94,7 +94,7 @@ class DB{
 	
 	public function display_message($per_page,$start)
 	{
-		$query = "SELECT pk_contact,name,email, LEFT(message,10) as pesan, added_date,status FROM CONTACT ORDER BY status DESC 
+		$query = "SELECT pk_contact,name,email, LEFT(message,15) as pesan, added_date,status FROM CONTACT ORDER BY status ASC,added_date DESC 
 		LIMIT $start,$per_page";
 		$t = mysqli_query($this->link,$query);
 		return $t;
@@ -109,7 +109,7 @@ class DB{
 	
 	public function display_detail_message($id_message)
 	{
-		$query_one = "UPDATE CONTACT set STATUS='0' where pk_contact='$id_message'";
+		$query_one = "UPDATE CONTACT set STATUS='1' where pk_contact='$id_message'";
 		mysqli_query($this->link,$query_one);
 		
 		$query = "SELECT * FROM CONTACT WHERE pk_contact = '$id_message'";
@@ -185,10 +185,9 @@ class DB{
 		$browser 	= mysqli_real_escape_string($this->link,$data['browser']);
 		$url_server 	= mysqli_real_escape_string($this->link,$data['url_server']);
 		$waktu 		= date("Y-m-d H:i:s");
-		$status		= 0; //berarti belum di baca
 		
-		$query = "INSERT INTO DATALOG(pk_datalog,ip,nama_komputer,browser,url_server,waktu,status) 
-				VALUES('NULL','$ip','$nama_komputer','$browser','$url_server','$waktu','$status')";
+		$query = "INSERT INTO DATALOG(pk_datalog,ip,nama_komputer,browser,url_server,waktu) 
+				VALUES('NULL','$ip','$nama_komputer','$browser','$url_server','$waktu')";
 		mysqli_query($this->link,$query);
 		
 		$query = "SELECT r.description
@@ -200,6 +199,28 @@ class DB{
 		$r = $m->fetch_array();
 		$tipe =  $r['description'];
 		return $tipe;
+	}
+	
+	public function dbNewMessage($email,$name,$message,$url){
+		$email 	 	= mysqli_real_escape_string($this->link,$email);
+		$name 		= mysqli_real_escape_string($this->link,$name);
+		$message 	= mysqli_real_escape_string($this->link,$message);
+		$url 	= mysqli_real_escape_string($this->link,$url);
+		$stat		= 0; //berarti belum di baca
+		$waktu 		= date("Y-m-d H:i:s");	
+		
+		mysqli_autocommit($this->link,FALSE);
+		
+		$query = "INSERT INTO CONTACT(pk_contact,name,email,message,added_date,url_server,status) 
+				  VALUES('NULL','$name','$email','$message','$waktu','$url','$stat')";
+		mysqli_query($this->link,$query);
+		
+		if(mysqli_errno($this->link))
+			return -1;
+		else{
+			mysqli_commit($this->link);
+			return 1;
+		}
 	}
      
 };

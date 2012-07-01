@@ -4,7 +4,7 @@ $(document).ready(function() {
                 var kategori = $("#kategori").val();
                 //alert(kategori);
                 
-		$("#content").load("data_list.php","kategori="+kategori);
+		$(".isi").load("data_list.php","kategori="+kategori);
 		   	
           });
           
@@ -16,13 +16,34 @@ $(document).ready(function() {
 		 });
 });
 </script>
+
+<style>
+
+table
+{
+width:80%; border:1px solid #ffcccc; margin-bottom:20px;
+}
+
+table th
+{
+background:#E6E6E6; padding:5px 15px 5px 15px; color:#573c1e; font-weight:bold; text-align:center; border-bottom:1px solid #ffcccc; font-size: 16px;
+}
+
+table td
+{
+border-bottom:1px solid #ffcccc; padding:5px 15px 5px 15px; border-right:1px solid #ffcccc;
+}
+
+</style>
+
+
 Select Category : <select name="kategori" id="kategori">
 <option value="">select category</option>
 <?php
 require_once("db.php");
 $db = new DB;
 
-$per_page = 2; 
+$per_page = 5; 
 
 $kat = $_GET['kategori'];
 if(isset($kat))

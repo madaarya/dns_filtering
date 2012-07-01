@@ -144,23 +144,3 @@ body{
     margin-left:-123px;
 }
 
-table
-{
-width:60%; border:1px solid #ffcccc; margin-bottom:20px;background:#ffcccc;
-}
-
-table th
-{
-background:#ffcccc; padding:5px 15px 5px 15px; color:#573c1e; font-weight:bold; text-align:center; border-bottom:1px solid #ffcccc; font-size: 16px;
-}
-
-table tr
-{
-padding:5px 15px 5px 15px; color:#573c1e; font-weight:bold; text-align:center; border-bottom:1px solid #ffcccc; font-size: 16px;
-}
-
-
-table tr td
-{
-border-bottom:1px solid #ffcccc; padding:5px 15px 5px 15px; border-right:1px solid #ffcccc;
-}
