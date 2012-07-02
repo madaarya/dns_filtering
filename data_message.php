@@ -66,7 +66,7 @@ $db = new DB;
 
 $m = new mada;
 
-$per_page = 5; 
+$per_page = 15; 
 
 
 if($_GET['page'])

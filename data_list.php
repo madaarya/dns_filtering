@@ -43,7 +43,7 @@ Select Category : <select name="kategori" id="kategori">
 require_once("db.php");
 $db = new DB;
 
-$per_page = 5; 
+$per_page = 15; 
 
 $kat = $_GET['kategori'];
 if(isset($kat))

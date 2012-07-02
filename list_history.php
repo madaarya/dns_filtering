@@ -22,7 +22,7 @@ cursor: pointer;
 </style>
 <div class="isi">
 <?php
-$per_page = 5; 
+$per_page = 15; 
 $db = new DB;
 
 //$kat = $_POST['kategori'];

@@ -123,12 +123,22 @@ class DB{
 		mysqli_query($this->link,$query);
 	}
 	
-	public function display_detail_datalog($name)
+	public function display_detail_datalog_all($name)
 	{
-		$query = "SELECT * FROM DATALOG WHERE url_server = '$name'";
+		$query = "SELECT * FROM DATALOG WHERE url_server = '$name' ORDER BY waktu DESC";
 		$t = mysqli_query($this->link,$query);
 		return $t;
 	}
+	
+	public function display_detail_datalog($per_page,$start,$name)
+	{
+		$query = "SELECT * FROM DATALOG WHERE url_server = '$name' ORDER BY waktu DESC
+		LIMIT $start,$per_page";
+		$t = mysqli_query($this->link,$query);
+		return $t;
+	}
+	
+	
 	
 	public function display_url_all($kat=NULL)
 	{

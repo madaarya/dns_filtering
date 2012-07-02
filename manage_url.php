@@ -21,7 +21,7 @@ cursor: pointer;
 
 <?php
 require_once("db.php");
-$per_page = 5; 
+$per_page = 15; 
 $db = new DB;
 
 $kat = $_POST['kategori'];

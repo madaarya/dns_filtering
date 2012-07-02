@@ -147,7 +147,7 @@ while($s = mysqli_fetch_array($kategori))
 </tr>	
 <?php
 
-$per_page = 5; 
+$per_page = 15; 
 
 $kat = $_GET['kategori'];
 if(isset($kat))

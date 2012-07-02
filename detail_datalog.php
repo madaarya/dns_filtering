@@ -1,70 +1,98 @@
 <?php
 require_once("db.php");
-require_once("myclass.php");
-$m = new mada;
-$db = new DB;
+?>
+
+<style>
+li
+{ 
+list-style: none; 
+float: left; 
+margin-right: 16px; 
+padding:5px; 
+border:solid 1px #dddddd;
+color:#0063DC; 
+}
+
+li:hover
+{ 
+color:#FF0084; 
+cursor: pointer; 
+}
+
+</style>
+<div class="isi">
+<?php
 
 $name = $_GET['name_url'];
 
-$data = $db->display_detail_datalog($name);
+$per_page = 100; 
+$db = new DB;
+
+//$kat = $_POST['kategori'];
+
+//Calculating no of pages
+$sql = $db->display_detail_datalog_all($name);
+$count = mysqli_num_rows($sql);
+$pages = ceil($count/$per_page);
 ?>
-
-<table>
-<tr>
-	<th>No</th>
-	<th>IP</th>
-	<th>Computer Name</th>
-	<th>Browser</th>
-	<th>Time</th>
-</tr>	
-<?php
-/*
-$per_page = 5; 
-
-$kat = $_GET['kategori'];
-if(isset($kat))
-{
-$page = 1;
-}
-
-
-if($_GET['page'])
-{
-$page=$_GET['page'];
-$mada = TRUE;
-}
-
-$start = ($page-1)*$per_page;
-
-if($mada)
-{
-	$no = 1 + $start; 
-}
-else
-{
-	$no = 1;
-}
-
-
-$data = $db->display_url($per_page,$start,$kat);
-*/
-	$no = 1;
-while ($d = mysqli_fetch_array($data)){
-				if ($no%2==0){
-					$bgcolor="#E6E6E6";
-				}else{
-				
-					$bgcolor="#F2F2F2";
-				}
+<div style="display:none" id="nama" class="<?php echo $name; ?>"></div>
+<p>Menu manage Url blocked</p>
+<script type="text/javascript">
+$(document).ready(function() {
 	
-	 ?>
-<tr bgcolor="<?php echo $bgcolor; ?>">
-<td align="center"><?php echo $no; ?></td>
-<td align="center"><?php echo $d['ip']; ?></td>
-<td align="center"><?php echo $d['nama_komputer']; ?></td>
-<td align="center"><?php echo $d['browser']; ?></td>	 
-<td align="center"><?php echo $m->set_waktu($d['waktu']); ?></td>
-</tr>
-<?php $no++; } ?>
-</table>
+	var page = 1;
+	
+	var nama = $("#nama").attr("class");
+	
+	$("#pagination li:first")
+	.css({'color' : '#FF0084'}).css({'border' : 'none'});
+	Display_Load();
+	
+	$("#content").load("data_detail_datalog.php", "page="+page+"&name="+nama);
 
+	function Display_Load()
+	{
+	$("#loading").fadeIn(600,0);
+	}
+	
+	function Hide_Load()
+	{
+	$("#loading").fadeOut('slow');
+	};
+	
+	$("#pagination li").click(function(){
+	Display_Load();
+	//CSS Styles
+	$("#pagination li")
+	.css({'border' : 'solid #dddddd 1px'})
+	.css({'color' : '#0063DC'});
+
+	$(this)
+	.css({'color' : '#FF0084'})
+	.css({'border' : 'none'});
+	//Loading Data
+	var pageNum = this.id;
+	
+	$("#content").load("data_detail_datalog.php", "page="+pageNum+"&name="+nama);
+	});
+
+
+
+});
+</script>
+
+
+<div id="loading"></div>
+<div id="content"></div>
+<ul id="pagination">
+<?php
+//Pagination Numbers
+for($i=1; $i<=$pages; $i++)
+{
+echo '<li id="'.$i.'">'.$i.'</li>';
+}
+?>
+</ul>
+
+
+</div>
