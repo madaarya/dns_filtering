@@ -1,15 +1,17 @@
 <?php
-session_start();
+session_start(); // aktifkan fitur session
 
-if(!$_SESSION['status'])
+
+
+if(!$_SESSION['status']) // jika session status tidak aktif
 {
 header("location:adminlogin.php");
 }
 
-if(isset($_REQUEST['act']))
+if(isset($_REQUEST['act'])) // jika tidak ada request aksi
 {
-session_destroy();
-header("location:adminlogin.php");
+session_destroy(); // matikan fitur session
+header("location:adminlogin.php"); // arahkan ke lokasi adminlogin.php
 }
 
 ?>
@@ -21,14 +23,14 @@ header("location:adminlogin.php");
         <script type="text/javascript">
 		$(document).ready(function() {
 		
-		$(".content").load("list_history.php");
+		$(".content").load("list_history.php"); // load file list_history,php, masukkan ke div content
 		
-		$("#list_history").click(function(){
-			$(".content").load("list_history.php");
+		$("#list_history").click(function(){ //jika link dgn id list_history di klik maka :
+			$(".content").load("list_history.php"); //// load file list_history,php, masukkan ke div content
 		});
 		
-		$("#category").click(function(){
-			$(".content").load("manage_category.php");
+		$("#category").click(function(){ //jika link dgn id category di klik maka :
+			$(".content").load("manage_category.php"); //load file manage_category,php, masukkan ke div content
 		});
 		
 		$("#url").click(function(){
@@ -55,7 +57,7 @@ header("location:adminlogin.php");
     <body>
     <div id="core">
     <div class="core-content">
-<h1>Hai <?php echo $_SESSION['nama']; ?></h1>
+<h1>Hai <?php echo $_SESSION['nama']; //panggil data session nama ?></h1>
 <br />
 <span style="float:left; margin-left:50px">
 <a href="#" id="list_history">History blocked</a><span id="pager">|</span> 

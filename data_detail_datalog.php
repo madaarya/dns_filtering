@@ -4,12 +4,45 @@ require_once("myclass.php");
 $m = new mada;
 $db = new DB;
 
-$per_page = 100; 
+$name = $_GET['name']; // get parameter name
+$per_page = 100; // tampilkan jumlah baris yg di tampilkan
+
+
+$sql = $db->display_detail_datalog_all($name);
+$count = mysqli_num_rows($sql); // hitung jumlah data
+$pages = ceil($count/$per_page); // jumlah data di bagi halaman yg di tentukan
+
 
 if($_GET['page'])
 {
-$page=$_GET['page'];
-$mada = TRUE;
+	switch($_GET['page']) // kondisi
+	{
+		case $_GET['page'] == 'first':
+		$page = 1;
+		break;
+		
+		case $_GET['page'] == 'last':
+		$page = $pages;
+		break;
+		 
+		case $_GET['page'] == 'next':
+		$page = $_GET['nilai'] + 1;
+		break; 
+		 
+		case $_GET['page'] == 'prev':
+		$page = $_GET['nilai'] - 1;
+		break;
+		
+		case empty($_GET['page']) :
+		$page = 0;
+		break;
+		  
+		 
+		default:
+		$page = $_GET['page'];
+	}
+	
+	$mada = TRUE;
 }
 
 $start = ($page-1)*$per_page;
@@ -23,11 +56,11 @@ else
 	$no = 1;
 }
 
-$name = $_GET['name'];
-
-$data = $db->display_detail_datalog($per_page,$start,$name);
+$data = $db->display_detail_datalog($per_page,$start,$name); // ambil data detail pribadi
 ?>
 
+<div style="display:none" id="paging" class="<?php echo $page; ?>"></div>
+<input type="hidden" id="paging2" value="<? echo $page; ?>" />
 <style>
 
 table
@@ -48,6 +81,7 @@ border-bottom:1px solid #ffcccc; padding:5px 15px 5px 15px; border-right:1px sol
 </style>
 
 
+<p>Total data : <?php echo $count; ?></p>
 <table>
 <tr>
 	<th>No</th>
@@ -57,7 +91,7 @@ border-bottom:1px solid #ffcccc; padding:5px 15px 5px 15px; border-right:1px sol
 	<th>Time</th>
 </tr>	
 <?php
-while ($d = mysqli_fetch_array($data)){
+while ($d = mysqli_fetch_array($data)){ // looping data hasil dari database
 				if ($no%2==0){
 					$bgcolor="#E6E6E6";
 				}else{

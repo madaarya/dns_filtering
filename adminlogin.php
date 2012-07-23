@@ -1,24 +1,25 @@
 <?php
 session_start();
-require_once("db.php"); 
+require_once("db.php"); // ambil fungsi2 yg ada di file db.php
 
-$db = new DB;
+$db = new DB; // inisialisasi objek dr class DB
 
-$username = $_POST['username'];
+// tangkap input login
+$username = $_POST['username']; 
 $psw = sha1($_POST['password']);
 $t = $_POST['login'];
 
 	if($t) 
 	{	
     	$cek = $db->login($username,$psw);
-    		if(mysqli_num_rows($cek) == 1)
+    		if(mysqli_num_rows($cek) == 1) // jika query menghasilkan 1
     		{
-			$c = mysqli_fetch_array($cek);
-			$_SESSION['userid'] = $c['userid'];
+			$c = mysqli_fetch_array($cek); // pisahkan array
+			$_SESSION['userid'] = $c['userid']; // set session
 			$_SESSION['nama'] = $c['nama'];
 			$_SESSION['level'] = $c['level'];
 			$_SESSION['status'] = TRUE;
-			if($c['level']== "admin")
+			if($c['level']== "admin") // jika level yg loginnya admin
 			{
 			    header("location:admin.php");
 			}

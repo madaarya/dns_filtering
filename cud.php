@@ -3,7 +3,7 @@ require_once("db.php");
 
 $db = new DB;
 
-$desc = $_POST['desc'];
+$desc = $_POST['desc']; // tangkap inputan post
 $url = $_POST['url'];
 $kategori = $_POST['category'];
 $id_category = $_POST['id_category'];

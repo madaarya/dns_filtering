@@ -90,7 +90,7 @@ class Contact{
 	
 	public function setError($field, $errmsg){
 		$this->errors[$field] 	= $errmsg;
-		$this->num_errors 		= count($this->errors);
+		$this->num_errors 	= count($this->errors); //hitung error
 	}
 	
 	public function error_value($field){
